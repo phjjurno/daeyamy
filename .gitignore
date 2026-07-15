@@ -1,0 +1,11 @@
+# 시스템
+.DS_Store
+Thumbs.db
+*.log
+
+# 에디터
+.vscode/
+.idea/
+
+# 로컬 설정 (개인 키나 환경변수가 있는 파일은 여기에 추가)
+*.local

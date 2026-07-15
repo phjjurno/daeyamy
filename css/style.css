@@ -1,0 +1,256 @@
+/* ══════════════════════════════════════════════════════════
+   대얌(DAEYAM) 레이아웃 · 컴포넌트 스타일 (모바일 우선 반응형)
+   ══════════════════════════════════════════════════════════ */
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{min-height:100vh;display:flex;flex-direction:column}
+
+/* ── 헤더 ── */
+.header{display:flex;align-items:center;gap:16px;padding:13px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:30}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--accent)}
+.logo-icon{width:30px;height:30px}
+.logo-text{font-size:22px;font-weight:700;letter-spacing:-.5px;color:var(--text)}
+.logo-text em{font-style:normal;color:var(--accent);font-size:14px;margin-left:5px;font-weight:700}
+.tagline{margin:0;color:var(--sub);font-size:13px;display:none}
+@media(min-width:720px){.tagline{display:block}}
+
+/* ── 메인 2단 레이아웃: 모바일=지도 위/패널 아래, 데스크탑=패널 좌/지도 우 ── */
+.layout{flex:1;display:flex;flex-direction:column;width:100%;max-width:1200px;margin:0 auto}
+.panel{padding:16px 20px 8px}
+@media(min-width:960px){
+  .layout{flex-direction:row;align-items:flex-start;gap:20px;padding:20px}
+  .panel{order:-1;width:450px;flex:none;padding:0}
+}
+
+/* ── 검색 + 내 위치 ── */
+.search-row{display:flex;gap:8px;margin-bottom:12px}
+.search-box{flex:1;display:flex;align-items:center;gap:6px;border:1.5px solid var(--border);border-radius:10px;padding:0 6px 0 10px;background:var(--surface);transition:.15s}
+.search-box:focus-within{border-color:var(--primary)}
+.search-btn{display:grid;place-items:center;background:none;border:none;padding:6px;cursor:pointer;color:var(--sub);border-radius:8px;flex:none}
+.search-btn:hover{color:var(--accent)}
+.search-btn .icon{width:19px;height:19px}
+.search-box input{border:none;outline:none;flex:1;min-width:0;padding:12px 0;font:inherit;font-size:15px;color:var(--text);background:transparent}
+.search-box input::placeholder{color:var(--sub)}
+
+/* 검색 범위: 도보/차량 + 반경 */
+.scope-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.scope-row[hidden]{display:none}
+.travel{display:inline-flex;gap:4px;padding:3px;background:var(--tint);border-radius:10px}
+.travel-btn{border:none;background:none;font:inherit;font-size:13px;font-weight:700;color:var(--sub);padding:7px 13px;border-radius:8px;cursor:pointer;transition:.15s}
+.travel-btn:hover{color:var(--text)}
+.travel-btn[aria-pressed="true"]{background:var(--surface);color:var(--accent);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.radius{display:inline-flex;align-items:center;gap:8px}
+.radius-label{font-size:13px;font-weight:700;color:var(--accent);white-space:nowrap}
+#radiusSelect{border:1.5px solid var(--border);border-radius:10px;padding:7px 9px;font:inherit;font-size:13px;color:var(--text);background:var(--surface);cursor:pointer}
+
+/* 근처 주차장 버튼 (지도 위 플로팅) */
+.parking-btn{position:absolute;right:12px;bottom:12px;z-index:6;display:inline-flex;align-items:center;gap:5px;background:var(--surface);color:var(--text);border:1.5px solid var(--border);border-radius:999px;padding:9px 15px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);transition:.15s}
+.parking-btn[hidden]{display:none}
+.parking-btn:hover{border-color:#1A73E8}
+.parking-btn:disabled{opacity:.6;cursor:progress}
+.parking-btn.on{background:#1A73E8;color:#fff;border-color:#1A73E8}
+.btn-locate{display:flex;align-items:center;gap:6px;white-space:nowrap;font-size:14px;padding:12px 14px}
+.btn-locate .icon{width:17px;height:17px}
+
+/* ── 오늘의 당첨 배너 ── */
+.win-banner{display:flex;align-items:center;gap:10px;border:1.5px solid var(--primary-dark);background:var(--tint);border-radius:14px;padding:10px 12px;margin-bottom:14px}
+.win-banner[hidden]{display:none}
+.win-emoji{font-size:24px;flex:none}
+.win-body{flex:1;min-width:0}
+.win-title{margin:0;font-size:12.5px;color:var(--sub)}
+.win-title strong{color:var(--accent);font-size:15px}
+.win-addr{margin:2px 0 0;font-size:12px;color:var(--sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.win-link{padding:8px 13px;font-size:13px;text-decoration:none;flex:none}
+.win-close{background:none;border:none;color:var(--sub);cursor:pointer;font-size:13px;padding:6px;flex:none;border-radius:8px}
+.win-close:hover{color:var(--text)}
+.win-banner.pop{animation:win-pop .45s cubic-bezier(.34,1.56,.64,1)}
+
+/* ── 카테고리 탭 ── */
+.tabs{display:flex;gap:8px;margin-bottom:14px}
+.tab{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px 6px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface);font:inherit;font-size:14px;font-weight:700;color:var(--sub);cursor:pointer;transition:.15s}
+.tab:hover{border-color:var(--primary);color:var(--text)}
+.tab[aria-pressed="true"]{background:var(--primary-dark);border-color:var(--primary-dark);color:#fff}
+
+/* ── 제외 필터 칩 ── */
+.chip-label{font-size:12px;color:var(--sub);margin:0 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border:1.5px solid var(--border);border-radius:999px;background:var(--surface);font:inherit;font-size:13px;font-weight:500;color:var(--text);cursor:pointer;transition:.15s}
+.chip:hover{border-color:var(--primary)}
+.chip .icon{width:13px;height:13px;display:none}
+/* 제외됨: 배경을 눌러 채우고 흐리게 + 취소선 + X 아이콘 노출 */
+.chip[aria-pressed="true"]{border-color:var(--primary-dark);background:var(--tint);color:var(--accent);text-decoration:line-through;font-weight:700;opacity:.8}
+.chip[aria-pressed="true"] .icon{display:block}
+/* 누를 때 "톡" 튀는 반응 */
+.chip--pop{animation:chip-pop .32s cubic-bezier(.34,1.56,.64,1)}
+@keyframes chip-pop{0%{transform:scale(1)}30%{transform:scale(.9)}62%{transform:scale(1.12)}100%{transform:scale(1)}}
+
+/* ── 후보 수 + 정렬 ── */
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.count{font-size:14px;margin:0}
+.count-scope{color:var(--sub);font-size:12px;font-weight:500}
+.count strong{color:var(--accent);display:inline-block}
+.count.pulse strong{animation:count-pulse .34s ease}
+@keyframes count-pulse{0%{transform:scale(1)}45%{transform:scale(1.35);color:var(--primary)}100%{transform:scale(1)}}
+.sort{border:1.5px solid var(--border);border-radius:10px;padding:8px 10px;font:inherit;font-size:13px;color:var(--text);background:var(--surface);cursor:pointer}
+
+/* ── 매장 카드 리스트 ── */
+.store-list{list-style:none;margin:0;padding:0 0 8px;display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:560px) and (max-width:959px){.store-list{grid-template-columns:1fr 1fr}}
+.card{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 14px;border:1.5px solid var(--border);border-radius:14px;background:var(--surface);cursor:pointer;font:inherit;transition:.15s}
+.card:hover{border-color:var(--primary);box-shadow:0 2px 10px rgba(34,34,34,.08)}
+.card.selected{border-color:var(--primary-dark);box-shadow:0 0 0 1.5px var(--primary-dark)}
+.card-emoji{font-size:24px;flex:none;width:46px;height:46px;display:grid;place-items:center;background:var(--tint);border-radius:12px}
+.card-body{min-width:0;flex:1}
+.card-name{margin:0 0 3px;font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-meta{margin:0 0 2px;font-size:13px;color:var(--sub);display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.badge{font-size:11px;font-weight:700;color:var(--accent);background:var(--surface);border:1px solid color-mix(in srgb,var(--primary) 40%,var(--surface));padding:2px 8px;border-radius:999px}
+.star{color:var(--primary)}
+.card-addr{margin:0;font-size:12px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.empty{padding:32px 12px;text-align:center;color:var(--sub);font-size:14px;line-height:1.7;border:1.5px dashed var(--border);border-radius:14px;margin-bottom:8px}
+
+/* 카드 등장 애니메이션 (탭 전환·제외 해제·정렬 시에만) */
+.store-list.enter li{animation:card-enter .3s ease both}
+@keyframes card-enter{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+/* 제외 시 카드가 "펑" 튕겨 나가는 이펙트 */
+.card.ejecting{animation:card-eject .3s cubic-bezier(.5,-0.4,.7,.2) forwards;pointer-events:none}
+@keyframes card-eject{0%{transform:scale(1) rotate(0);opacity:1}28%{transform:scale(1.05) rotate(-2deg)}100%{transform:translateX(-32px) scale(.55) rotate(-8deg);opacity:0}}
+
+/* ── 목업 지도 ── */
+.map-wrap{position:relative;height:42vh;min-height:270px;overflow:hidden;background:#F4F2EC}
+@media(min-width:960px){.map-wrap{position:sticky;top:81px;flex:1;height:calc(100vh - 190px);min-height:420px;border:1px solid var(--border);border-radius:16px}}
+.map-badge{position:absolute;top:12px;left:12px;z-index:6;display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:6px 12px;font-size:12px;color:var(--sub);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.mm{position:absolute;inset:0}
+/* 도로 격자 배경 */
+.mm-bg{position:absolute;inset:0;background-color:#F4F2EC;background-image:
+  repeating-linear-gradient(90deg,transparent 0 128px,#FFFFFF 128px 138px),
+  repeating-linear-gradient(0deg,transparent 0 106px,#FFFFFF 106px 116px)}
+.mm-park{position:absolute;left:5%;top:7%;width:22%;height:26%;background:#DEEBD6;border-radius:18px}
+.mm-water{position:absolute;right:-14%;bottom:-20%;width:56%;height:48%;background:#D8E7F2;border-radius:45% 55% 0 0/65% 70% 0 0;transform:rotate(-8deg)}
+.mm-block{position:absolute;background:#EAE7DF;border-radius:8px}
+.mm-label{position:absolute;font-size:11px;color:var(--sub);letter-spacing:.5px;pointer-events:none}
+
+/* 내 위치 (파란 점 + 퍼지는 링) */
+.mm-me{position:absolute;left:50%;top:50%;width:15px;height:15px;margin:-7.5px 0 0 -7.5px;background:#1A73E8;border:2.5px solid #fff;border-radius:50%;box-shadow:0 1px 5px rgba(0,0,0,.3);z-index:4}
+.mm-me::before{content:'';position:absolute;inset:-9px;border-radius:50%;background:rgba(26,115,232,.25);animation:me-pulse 2.2s ease-out infinite}
+@keyframes me-pulse{0%{transform:scale(.4);opacity:1}100%{transform:scale(1.7);opacity:0}}
+
+/* 매장 마커 (핀 + 이름 라벨) */
+.marker{position:absolute;transform:translate(-50%,-100%);background:none;border:none;padding:0 0 6px;cursor:pointer;z-index:2}
+/* 제외 시 마커가 위로 뿅 사라짐 (중앙 정렬 transform 유지) */
+.marker.ejecting{animation:marker-eject .3s ease-in forwards;pointer-events:none}
+@keyframes marker-eject{0%{transform:translate(-50%,-100%) scale(1);opacity:1}100%{transform:translate(-50%,-160%) scale(.3);opacity:0}}
+.marker-pin{position:relative;display:grid;place-items:center;width:34px;height:34px;background:var(--primary-dark);border:2px solid #fff;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.28);font-size:15px;transition:.15s}
+.marker-pin::after{content:'';position:absolute;left:50%;bottom:-7px;transform:translateX(-50%);border:5.5px solid transparent;border-top:7px solid var(--primary-dark);border-bottom:none}
+.marker-name{position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);white-space:nowrap;background:#222222;color:#fff;font-size:11px;font-weight:500;padding:3px 9px;border-radius:6px;opacity:0;pointer-events:none;transition:.15s}
+.marker:hover .marker-name,.marker:focus-visible .marker-name,.marker.selected .marker-name{opacity:1}
+.marker:hover{z-index:5}
+.marker.selected{z-index:5}
+.marker.selected .marker-pin{transform:scale(1.2)}
+
+/* ── 하단 룰렛 버튼 바 ── */
+.cta-bar{position:sticky;bottom:0;z-index:30;display:flex;justify-content:center;padding:8px 20px 16px;background:linear-gradient(to top,var(--bg) 65%,transparent)}
+.btn-cta{width:100%;max-width:480px;display:flex;align-items:center;justify-content:center;gap:9px;font-size:16px;padding:15px 20px;box-shadow:0 4px 16px rgba(230,30,77,.35)}
+.btn-cta .icon{width:21px;height:21px}
+
+/* ── 룰렛 모달 ── */
+.modal{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal[hidden]{display:none}
+.modal-backdrop{position:absolute;inset:0;background:rgba(34,34,34,.55)}
+.modal-box{position:relative;background:var(--surface);border-radius:20px;padding:24px 20px 20px;width:100%;max-width:420px;max-height:92vh;overflow:auto;box-shadow:0 10px 40px rgba(0,0,0,.25);text-align:center}
+.modal-title{margin:0 0 10px;font-size:18px}
+.modal-close{position:absolute;top:10px;right:10px;background:none;border:none;cursor:pointer;color:var(--sub);padding:8px;border-radius:8px;display:grid;place-items:center}
+.modal-close:hover{color:var(--text)}
+.modal-close .icon{width:20px;height:20px}
+
+/* 뽑기 방식 토글 (다트 / 룰렛 / 구슬 뽑기) */
+.mode-switch{display:inline-flex;flex-wrap:wrap;justify-content:center;gap:4px;padding:4px;background:var(--tint);border-radius:12px;margin:2px 0 14px}
+.mode-btn{border:none;background:none;font:inherit;font-size:12.5px;font-weight:700;color:var(--sub);padding:8px 12px;border-radius:9px;cursor:pointer;transition:.15s}
+.mode-btn:hover{color:var(--text)}
+.mode-btn[aria-pressed="true"]{background:var(--surface);color:var(--accent);box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.stage[hidden]{display:none}
+
+/* 구슬 뽑기 통 */
+.gacha-wrap{width:min(70vw,280px);margin:0 auto}
+#gachaSvg{display:block;width:100%;height:auto;overflow:visible}
+/* 긴장 구간에 통·지도가 부르르 흔들림 */
+.gacha-wrap.shake,.dart-wrap.shake{animation:gacha-shake .16s ease-in-out infinite}
+@keyframes gacha-shake{0%,100%{transform:translateX(0) rotate(0)}25%{transform:translate(-3px,1px) rotate(-1.2deg)}75%{transform:translate(3px,-1px) rotate(1.2deg)}}
+.gacha-wrap.armed,.dart-wrap.armed{cursor:pointer}
+
+/* 다트 뽑기 지도 */
+.dart-wrap{width:min(74vw,300px);margin:0 auto}
+#dartSvg{display:block;width:100%;height:auto;overflow:visible}
+/* 던지기 전까지 손이 계속 흔들리는 이펙트 */
+#dartSvg .wobble{animation:hand-wobble .85s ease-in-out infinite}
+@keyframes hand-wobble{0%,100%{transform:rotate(-7deg) translateY(0)}50%{transform:rotate(7deg) translateY(-3px)}}
+/* 조준 레티클: 던지기 전 콩콩 뛰며 조준 */
+#dartReticle.pulse{animation:reticle-pulse .9s ease-in-out infinite}
+@keyframes reticle-pulse{0%,100%{opacity:.85;transform:scale(1)}50%{opacity:1;transform:scale(1.28)}}
+/* 명중 순간 충격 링이 퍼짐 */
+#dartFlash.flash{animation:dart-flash .55s ease-out}
+@keyframes dart-flash{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(4.5)}}
+/* 꽂힌 다트 착탄 바운스 */
+#dartStuck.land{animation:dart-land .42s cubic-bezier(.34,1.56,.64,1)}
+@keyframes dart-land{0%{transform:scale(1.6)}100%{transform:scale(1)}}
+
+/* 스테이지 실행 버튼 — 대기 중 눌러달라고 콩콩 뜀 */
+.stage-go{margin:14px auto 0;display:block;font-size:15px;padding:13px 28px}
+.stage-go[hidden]{display:none}
+.stage-go:not([hidden]){animation:draw-invite 1s ease-in-out infinite}
+@keyframes draw-invite{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+
+/* 당첨 축하 — 폭죽 + 꽃가루 */
+.celebrate{position:absolute;inset:0;pointer-events:none;z-index:6;overflow:hidden}
+.celebrate i{position:absolute;opacity:0}
+/* 폭죽: 사방으로 퍼졌다 사라짐 */
+.celebrate .fw{width:7px;height:7px;border-radius:50%;animation:fw-pop var(--t) ease-out forwards}
+@keyframes fw-pop{0%{opacity:1;transform:translate(0,0) scale(1.2)}70%{opacity:1}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(.2)}}
+/* 꽃가루: 위에서 팔랑팔랑 떨어짐 */
+.celebrate .cf{width:8px;height:12px;border-radius:2px;animation:cf-fall var(--t) ease-in forwards}
+@keyframes cf-fall{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--x),var(--y)) rotate(var(--r))}}
+
+/* 결과 카드 팝 등장 */
+.result.win-pop{animation:win-pop .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes win-pop{0%{transform:scale(.85);opacity:0}100%{transform:scale(1);opacity:1}}
+
+/* 룰렛 휠 */
+.wheel-wrap{position:relative;width:min(76vw,300px);margin:6px auto 0}
+.wheel-pointer{position:absolute;top:-5px;left:50%;transform:translateX(-50%);z-index:3;width:0;height:0;border:11px solid transparent;border-top:17px solid var(--primary-dark);border-bottom:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
+.wheel-clip{border-radius:50%;overflow:hidden}
+#wheelSvg{display:block;width:100%;height:auto;transition:transform .7s cubic-bezier(.25,0,.2,1)}
+/* 멈추면 당첨 조각(12시)으로 확대 */
+.wheel-clip.zoom #wheelSvg{transform:scale(2.4);transform-origin:50% 3%}
+/* 확대와 함께 뜨는 상호명 */
+.wheel-name{position:absolute;left:50%;bottom:9%;transform:translateX(-50%) scale(.6);z-index:4;max-width:88%;background:var(--surface);color:var(--accent);border:1.5px solid var(--primary-dark);border-radius:999px;padding:7px 16px;font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 3px 12px rgba(0,0,0,.2);opacity:0;transition:.35s cubic-bezier(.34,1.56,.64,1)}
+.wheel-name[hidden]{display:none}
+.wheel-name.show{opacity:1;transform:translateX(-50%) scale(1)}
+.wheel-status{margin:12px 0 0;font-size:14px;color:var(--sub);min-height:20px}
+
+/* 추첨 결과 카드 */
+.result{margin-top:14px;border:1.5px solid var(--border);border-radius:16px;padding:18px 14px 14px}
+.result-emoji{font-size:40px;display:block;line-height:1.2}
+.result-name{margin:6px 0 6px;font-size:20px}
+.result-name:focus-visible{outline-offset:4px}
+.result-meta{justify-content:center}
+.result-addr{margin:4px 0 0;font-size:13px;color:var(--sub)}
+.result-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.result-actions .btn{flex:1;min-width:104px;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;font-size:14px;padding:11px 10px}
+.result-actions .btn .icon{width:17px;height:17px}
+.btn-ghost{background:var(--surface);color:var(--text);border:1.5px solid var(--border)}
+.btn-ghost:hover{border-color:var(--primary);filter:none}
+
+/* ── 토스트 알림 (라이트·다크 공통 어두운 배경) ── */
+#toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(10px);background:#2B2B2B;color:#fff;border:1px solid rgba(255,255,255,.18);padding:11px 18px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:50;max-width:90vw;text-align:center}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── 서비스 소개 푸터 ── */
+.about{border-top:1px solid var(--border);margin-top:28px;background:var(--surface)}
+.about-inner{max-width:760px;margin:0 auto;padding:32px 20px 44px;color:var(--sub);font-size:14px;line-height:1.75}
+.about-inner h2{color:var(--text);font-size:17px;margin:0 0 8px}
+.about-inner h3{color:var(--text);font-size:14px;margin:20px 0 6px}
+.about-inner p{margin:0 0 4px}
+.about-inner ol{margin:0;padding-left:20px}
+.about-inner li{margin:5px 0}
+.about-inner li strong{color:var(--text)}
+.about-note{font-size:12.5px;margin-top:14px}
+.about-copy{margin-top:22px;font-size:12px;opacity:.75}

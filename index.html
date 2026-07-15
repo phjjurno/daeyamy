@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>대얌이 — 오늘 뭐먹지?</title>
+  <meta name="description" content="내 근처 음식점·카페·술집을 룰렛과 뽑기로 골라주는 오늘 뭐먹지 서비스, 대얌이">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ══ 둥근 라인 아이콘 스프라이트 (stroke 1.9 / round cap·join) ══ -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+    <symbol id="icon-bowl" viewBox="0 0 24 24">
+      <path d="M4 12h16a8 8 0 0 1-16 0Z"/>
+      <path d="M9.3 3.5c-.9 1.1.9 2.1-.2 3.4M14.9 3.5c-.9 1.1.9 2.1-.2 3.4"/>
+    </symbol>
+    <symbol id="icon-search" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="7"/>
+      <path d="m16.5 16.5 4.5 4.5"/>
+    </symbol>
+    <symbol id="icon-locate" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="6.5"/>
+      <circle cx="12" cy="12" r="1.8"/>
+      <path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"/>
+    </symbol>
+    <symbol id="icon-pin" viewBox="0 0 24 24">
+      <path d="M12 21.5s-7-5.7-7-11a7 7 0 0 1 14 0c0 5.3-7 11-7 11Z"/>
+      <circle cx="12" cy="10.3" r="2.4"/>
+    </symbol>
+    <symbol id="icon-roulette" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9"/>
+      <path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"/>
+      <circle cx="12" cy="12" r="2.2"/>
+    </symbol>
+    <symbol id="icon-share" viewBox="0 0 24 24">
+      <circle cx="18" cy="5.5" r="2.5"/>
+      <circle cx="6" cy="12" r="2.5"/>
+      <circle cx="18" cy="18.5" r="2.5"/>
+      <path d="m8.2 10.8 7.6-4.1M8.2 13.2l7.6 4.1"/>
+    </symbol>
+    <symbol id="icon-x" viewBox="0 0 24 24">
+      <path d="M6 6l12 12M18 6L6 18"/>
+    </symbol>
+  </svg>
+
+  <!-- ══ 헤더 ══ -->
+  <header class="header">
+    <a class="logo" href="./" aria-label="대얌이 홈으로 가기">
+      <svg class="icon logo-icon" aria-hidden="true"><use href="#icon-bowl"/></svg>
+      <span class="logo-text">대얌이<em>DAEYAMY</em></span>
+    </a>
+    <p class="tagline">오늘 뭐 먹을지, 대얌이가 뽑아줄게요</p>
+  </header>
+
+  <main class="layout">
+
+    <!-- ══ 지도 영역 (PART 1: 목업 / PART 2: 카카오맵 SDK로 교체) ══ -->
+    <section class="map-wrap" aria-label="내 주변 매장 지도">
+      <div class="map-badge">
+        <svg class="icon" style="width:15px;height:15px" aria-hidden="true"><use href="#icon-pin"/></svg>
+        목업 지도 · PART 2에서 카카오맵 연동
+      </div>
+      <div id="mockMap" class="mm"></div>
+      <!-- 근처 주차장 찾기 (카카오 모드에서만 노출) -->
+      <button id="parkingBtn" class="parking-btn" hidden aria-pressed="false" aria-label="근처 주차장 찾기">🅿️ 근처 주차장</button>
+    </section>
+
+    <!-- ══ 검색 · 필터 · 매장 리스트 패널 ══ -->
+    <section class="panel" aria-label="검색과 필터">
+
+      <!-- 동네 검색 + 내 위치 -->
+      <div class="search-row">
+        <form id="searchForm" class="search-box" role="search">
+          <button type="submit" id="searchBtn" class="search-btn" aria-label="동네 검색">
+            <svg class="icon" aria-hidden="true"><use href="#icon-search"/></svg>
+          </button>
+          <input id="searchInput" type="search" placeholder="예) 연남동, 강남역, 홍대"
+                 aria-label="동네·지역 검색 (예: 연남동)">
+        </form>
+        <button id="locateBtn" class="btn btn-locate" aria-label="내 위치로 지도 이동">
+          <svg class="icon" aria-hidden="true"><use href="#icon-locate"/></svg>
+          내 위치
+        </button>
+      </div>
+
+      <!-- 검색 범위: 도보/차량 + 반경 (카카오 모드에서만 노출) -->
+      <div id="scopeRow" class="scope-row" hidden>
+        <div class="travel" role="group" aria-label="이동 수단 (선택 안 하면 그대로)">
+          <button id="travelWalk" class="travel-btn" aria-pressed="false">🚶 도보</button>
+          <button id="travelCar" class="travel-btn" aria-pressed="false">🚗 차량</button>
+        </div>
+        <label class="radius">
+          <span class="radius-label" id="radiusLabel">반경 1km</span>
+          <select id="radiusSelect" aria-label="검색 반경 선택"></select>
+        </label>
+      </div>
+
+      <!-- 오늘의 당첨 배너 (뽑기 결과가 홈에도 남음) -->
+      <div id="winBanner" class="win-banner" hidden>
+        <span class="win-emoji" aria-hidden="true">🎉</span>
+        <div class="win-body">
+          <p class="win-title">오늘의 당첨 — <strong id="winName"></strong></p>
+          <p class="win-addr" id="winAddr"></p>
+        </div>
+        <a id="winMapLink" class="btn win-link" target="_blank" rel="noopener"
+           aria-label="당첨 매장 카카오맵에서 보기">지도</a>
+        <button id="winClose" class="win-close" aria-label="당첨 배너 닫기">✕</button>
+      </div>
+
+      <!-- 카테고리 탭: 음식점 / 카페 / 술안주 -->
+      <div id="tabs" class="tabs" role="group" aria-label="매장 카테고리 선택"></div>
+
+      <!-- 제외 필터 칩 -->
+      <p class="chip-label" id="chipLabel">빼고 싶은 종류는 눌러서 제외하세요</p>
+      <div id="chips" class="chips" role="group" aria-labelledby="chipLabel"></div>
+
+      <!-- 후보 수 + 정렬 -->
+      <div class="toolbar">
+        <p class="count" id="count" aria-live="polite"></p>
+        <select id="sortSelect" class="sort" aria-label="매장 정렬 기준">
+          <option value="distance">가까운 순</option>
+          <option value="rating">평점 높은 순</option>
+          <option value="name">이름 순</option>
+        </select>
+      </div>
+
+      <!-- 매장 카드 리스트 -->
+      <ul id="storeList" class="store-list"></ul>
+      <div id="emptyState" class="empty" hidden>
+        조건에 맞는 매장이 없어요 😢<br>제외를 풀거나 검색어를 바꿔보세요
+      </div>
+
+    </section>
+  </main>
+
+  <!-- ══ 서비스 소개 · 사용 방법 ══ -->
+  <footer class="about" aria-label="서비스 소개와 사용 방법">
+    <div class="about-inner">
+      <h2>🍚 대얌이(DAEYAMY)는요</h2>
+      <p>"오늘 뭐 먹지?" 고민을 끝내주는 랜덤 맛집 추천 서비스예요.
+        내 위치나 검색한 동네 주변의 음식점·카페·술집을 지도에서 불러와,
+        다트·룰렛·구슬 뽑기 세 가지 미니게임으로 오늘 갈 곳 한 군데를 대신 골라드립니다.</p>
+
+      <h3>사용 방법</h3>
+      <ol>
+        <li><strong>위치 잡기</strong> — "내 위치" 버튼을 누르거나 검색창에 동네 이름을 입력하세요 (예: 연남동, 강남역)</li>
+        <li><strong>범위 정하기</strong> — 반경(300m~5km)을 고르거나 🚶 도보 / 🚗 차량 버튼으로 간단히 설정 (안 골라도 그대로 진행돼요)</li>
+        <li><strong>후보 추리기</strong> — 음식점 / 카페 / 술안주 탭을 고르고, 빼고 싶은 종류는 칩을 눌러 제외</li>
+        <li><strong>뽑기!</strong> — 🎯 다트 · 🎡 룰렛 · 🎰 구슬 뽑기 중 마음에 드는 방식으로 운명에 맡기세요</li>
+        <li><strong>공유</strong> — 당첨 매장을 카카오맵 링크와 함께 친구에게 보내고, 같이 가면 됩니다</li>
+      </ol>
+
+      <p class="about-note">🅿️ 지도의 "근처 주차장" 버튼으로 주변 주차장도 확인할 수 있어요.
+        매장 정보는 카카오 로컬 데이터를 사용하며, 검색당 최대 45곳까지 표시됩니다.
+        추천 결과는 완전한 무작위 — 광고나 순위가 아니에요.</p>
+      <p class="about-copy">© 2026 대얌이 DAEYAMY · 오늘 뭐먹지 룰렛</p>
+    </div>
+  </footer>
+
+  <!-- ══ 룰렛 실행 버튼 (고정 하단 바) ══ -->
+  <div class="cta-bar">
+    <button id="spinBtn" class="btn btn-cta" aria-label="뽑기 시작해서 매장 추천받기">
+      <svg class="icon" aria-hidden="true"><use href="#icon-roulette"/></svg>
+      <span id="spinBtnText">뽑기 시작</span>
+    </button>
+  </div>
+
+  <!-- ══ 룰렛 모달 ══ -->
+  <div id="rouletteModal" class="modal" hidden>
+    <div id="modalBackdrop" class="modal-backdrop"></div>
+    <div class="modal-box" role="dialog" aria-modal="true" aria-label="매장 룰렛 추첨">
+      <button id="modalClose" class="modal-close" aria-label="룰렛 닫기">
+        <svg class="icon" aria-hidden="true"><use href="#icon-x"/></svg>
+      </button>
+      <h2 class="modal-title">오늘의 뽑기 🎲</h2>
+
+      <!-- 뽑기 방식 선택 토글: 다트 / 룰렛 / 구슬 뽑기 -->
+      <div class="mode-switch" role="group" aria-label="뽑기 방식 선택">
+        <button id="modeDart" class="mode-btn" aria-pressed="true">🎯 다트 뽑기</button>
+        <button id="modeWheel" class="mode-btn" aria-pressed="false">🎡 룰렛</button>
+        <button id="modeGacha" class="mode-btn" aria-pressed="false">🎰 구슬 뽑기</button>
+      </div>
+
+      <!-- 다트 뽑기 스테이지: 손이 흔들리다 클릭하면 다트가 지도에 꽂히고 확대 -->
+      <div id="dartStage" class="stage">
+        <div class="dart-wrap">
+          <svg id="dartSvg" viewBox="0 0 200 232" role="img" aria-label="지도 다트 뽑기"></svg>
+        </div>
+        <button id="dartThrow" class="btn stage-go" hidden aria-label="다트 던져서 뽑기">🎯 다트 던지기!</button>
+      </div>
+
+      <!-- 룰렛 스테이지 -->
+      <div id="wheelStage" class="stage" hidden>
+        <div class="wheel-wrap">
+          <div class="wheel-pointer" aria-hidden="true"></div>
+          <div class="wheel-clip">
+            <svg id="wheelSvg" viewBox="0 0 200 200" role="img" aria-label="매장 추첨 룰렛"></svg>
+          </div>
+          <div id="wheelName" class="wheel-name" hidden></div>
+        </div>
+        <button id="wheelGo" class="btn stage-go" hidden aria-label="룰렛 돌리기">🎡 돌리기!</button>
+      </div>
+
+      <!-- 구슬 뽑기 스테이지 -->
+      <div id="gachaStage" class="stage" hidden>
+        <div class="gacha-wrap">
+          <svg id="gachaSvg" viewBox="0 0 200 226" role="img" aria-label="구슬 뽑기 기계"></svg>
+        </div>
+        <!-- 통이 도는 동안 대기, 누르면 그때부터 뽑기 연출 시작 -->
+        <button id="gachaDraw" class="btn stage-go" hidden aria-label="지금 구슬 뽑기">🎰 지금 뽑기!</button>
+      </div>
+
+      <p id="wheelStatus" class="wheel-status" role="status" aria-live="polite"></p>
+
+      <!-- 추첨 결과 카드 -->
+      <div id="resultCard" class="result" hidden>
+        <span id="resultEmoji" class="result-emoji" aria-hidden="true"></span>
+        <h3 id="resultName" class="result-name" tabindex="-1"></h3>
+        <p id="resultMeta" class="card-meta result-meta"></p>
+        <p id="resultAddr" class="result-addr"></p>
+        <div class="result-actions">
+          <a id="resultMapLink" class="btn" target="_blank" rel="noopener"
+             aria-label="카카오맵에서 매장 위치 보기">
+            <svg class="icon" aria-hidden="true"><use href="#icon-pin"/></svg>지도 보기</a>
+          <button id="shareBtn" class="btn" aria-label="추천 결과를 친구에게 공유하기">
+            <svg class="icon" aria-hidden="true"><use href="#icon-share"/></svg>공유</button>
+          <button id="respinBtn" class="btn btn-ghost" aria-label="룰렛 다시 돌리기">
+            <svg class="icon" aria-hidden="true"><use href="#icon-roulette"/></svg>다시</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 알림 토스트 -->
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

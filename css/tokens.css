@@ -1,0 +1,54 @@
+/* ══════════════════════════════════════════════════════════
+   대얌(DAEYAM) 디자인 시스템 토큰
+   색: 에어비앤비 · 레드 / 버튼: 라운드 / 폰트: Montserrat / 아이콘: 둥근 라인
+   ══════════════════════════════════════════════════════════ */
+
+/* 폰트: Montserrat (라틴·숫자) + Noto Sans KR (한글 폴백) */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap');
+
+/* 색 조합: 에어비앤비 · 레드 */
+:root{
+  --primary:#FF385C;
+  --primary-dark:#E61E4D;
+  --text:#222222;
+  --sub:#717171;
+  --bg:#FFFFFF;
+  --surface:#FFFFFF;
+  --border:#DDDDDD;
+  --accent:#E61E4D;   /* 색 있는 "텍스트"용 — 다크에선 밝은 톤으로 바꿔 대비 4.5:1 유지 */
+  --tint:#FFF0F3;     /* 연한 브랜드 배경 */
+}
+
+/* 다크 모드 — 시스템 설정(prefers-color-scheme) 따름 */
+@media (prefers-color-scheme: dark){
+  :root{
+    --text:#F2F2F2;
+    --sub:#A8A8A8;
+    --bg:#141414;
+    --surface:#1F1F1F;
+    --border:#3D3D3D;
+    --accent:#FF7A93;
+    --tint:#39222A;
+  }
+}
+
+body{font-family:'Montserrat','Noto Sans KR',sans-serif;color:var(--text);background:var(--bg)}
+h1,h2,h3{font-weight:700}
+
+/* 버튼 모양: 라운드
+   흰 글자 대비 4.5:1(접근성 메모)을 맞추기 위해 텍스트가 올라가는
+   버튼 배경은 primary(3.5:1) 대신 primary-dark(4.5:1)를 쓴다 */
+.btn{border-radius:10px;padding:12px 20px;font-weight:700;background:var(--primary-dark);color:#fff;border:none;cursor:pointer;transition:.15s;font-family:inherit;font-size:15px}
+.btn:hover{filter:brightness(.95)}
+.btn:disabled{background:var(--border);color:var(--sub);cursor:not-allowed;filter:none;box-shadow:none}
+
+/* 아이콘: 둥근 라인 */
+.icon{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+
+/* 키보드 포커스 표시 (접근성 메모) */
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+/* 모션 최소화 선호 시 애니메이션 제거 */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
