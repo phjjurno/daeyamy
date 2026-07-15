@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+# 검색엔진 크롤러 개별 허용 (구글·네이버·다음·빙)
+User-agent: Googlebot
+Allow: /
+
+User-agent: Yeti
+Allow: /
+
+User-agent: Daum
+Allow: /
+
+User-agent: bingbot
+Allow: /
+
+Sitemap: https://yamy.ws-qf.com/sitemap.xml

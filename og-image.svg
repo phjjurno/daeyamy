@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FF5A78"/>
+      <stop offset="1" stop-color="#E61E4D"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- 은은한 배경 원 장식 -->
+  <circle cx="1010" cy="130" r="220" fill="#ffffff" opacity="0.08"/>
+  <circle cx="170" cy="560" r="180" fill="#ffffff" opacity="0.07"/>
+
+  <!-- 밥그릇 아이콘 -->
+  <g transform="translate(600 190)" stroke="#ffffff" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M-52 6 H52 A52 52 0 0 1 -52 6 Z" fill="#ffffff" fill-opacity="0.15"/>
+    <path d="M-22 -34 c-9 11 9 20 -2 32 M22 -34 c-9 11 9 20 -2 32"/>
+  </g>
+
+  <!-- 로고 타이틀 -->
+  <text x="600" y="330" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="112" font-weight="800" fill="#ffffff">대얌이</text>
+  <text x="600" y="392" text-anchor="middle" font-family="Montserrat,sans-serif" font-size="34" font-weight="700" letter-spacing="10" fill="#ffffff" opacity="0.85">DAEYAMY</text>
+
+  <!-- 서브 카피 -->
+  <text x="600" y="470" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="42" font-weight="600" fill="#ffffff">오늘 뭐먹지? 내 주변 맛집 룰렛 추천</text>
+
+  <!-- 뽑기 방식 배지 -->
+  <text x="600" y="545" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" font-size="30" font-weight="500" fill="#ffffff" opacity="0.9">🎯 다트 · 🎡 룰렛 · 🎰 구슬 뽑기</text>
+</svg>
