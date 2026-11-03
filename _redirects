@@ -1,0 +1,4 @@
+# 검색엔진 소유확인 파일은 원래 주소(.html)에서 200 으로 응답해야 한다.
+# Cloudflare Pages 는 /x.html 을 /x 로 308 리다이렉트하므로 리라이트로 막는다.
+/google73568d4bf2368c35.html                 /google73568d4bf2368c35                 200
+/naver5d1e2f7f736b6b1714ab76b3a67f6e74.html  /naver5d1e2f7f736b6b1714ab76b3a67f6e74  200
